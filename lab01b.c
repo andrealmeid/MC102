@@ -38,7 +38,7 @@ int main(){
   
   /*FINAL*/
   consNow = aux;
-  dif = (100*consNow)/consPast;
+  dif = (100.0*consNow)/consPast;
   dif -= 100;
   printf("Difernça: %.2f\n", dif);
   
