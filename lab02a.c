@@ -1,3 +1,7 @@
+/* Nome: André Figueiredo de Almeida
+ * RA: 164047
+ * Laboratorio 02a - Coeficiente de Rendimento */
+
 #include <stdio.h>
 #include <math.h>
 
@@ -23,7 +27,7 @@ int main(){
   
   resultado = (float) dividendo / divisor;
   /*printf("#dividendo=%d\n", dividendo);*/
-  printf("#divisor=%d\n", divisor);
+  /*printf("#divisor=%d\n", divisor);*/
   if  (divisor != 0)
     printf("CR = %.4f\n", resultado);
   else
