@@ -8,8 +8,8 @@
 int main(){
   
   char x, aux;
-  int y, divisor = 0, dividendo = 0;
-  float resultado;
+  int y=-1, divisor = 0, dividendo = 0;
+  double resultado;
   
   while(x!='*'){
     scanf("%c", &x);
@@ -25,11 +25,16 @@ int main(){
     }
   }
   
-  resultado = (float) dividendo / divisor;
+  resultado = (double) dividendo / divisor;
   /*printf("#dividendo=%d\n", dividendo);*/
   /*printf("#divisor=%d\n", divisor);*/
-  if  (divisor != 0)
+  /*printf("%d\n", y);*/
+  if  (y >= 0){
+    if(y==0){
+      resultado = 0;
+    }
     printf("CR = %.4f\n", resultado);
+  }
   else
     printf("CR = Indefinido\n");
   
