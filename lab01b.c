@@ -1,3 +1,7 @@
+/* Nome: André Figueiredo de Almeida
+ * RA: 164047
+ * Laboratorio 01b - Conta de Água */
+
 #include <stdio.h>
 #include <math.h>
 
