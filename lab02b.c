@@ -4,60 +4,79 @@
 
 #include <stdio.h>
 #include <math.h>
-#define MAX 100
+#define MX 100
 
 int main(){
   
-  /*variaveis
-   *    int i, n, g, c, capital;
-   *    int casa[100]; 
-   *    
-   *    
-   *    scanf("%d %d %d", &n, &g, &c);
-   *    
-   *    for(i=0;i<n;i++)
-   *        scanf("%d", &casa[i]);
-   *    
-   *    processamento
-   *    capital = g * c;
-   */
+  /*variaveis*/
+  int i, j, nCasas, g, c, capital, valor, potencias[MX], casa[MX], notas, cont; 
   
-  int i, valor, fator, potencias[MAX], menor=0, cont=0;
+  for(i=0;i<MX;i++)
+
+    casa[i]=0;
   
-  for(i=0;i<MAX;i++)
+  /*entrada*/
+  scanf("%d %d %d", &nCasas, &g, &c);
+  
+  for(i=0;i<nCasas;i++)
+    scanf("%d", &casa[i]);
+  
+  /*processamento*/
+  /*capital = valor de ouro em dolares*/
+  capital = g * c;
+  
+  /*calculo repetido para cada casa*/
+  for(j=0;j<nCasas;j++){
+    
+    /*reinicia as variaveis*/
+    for(i=0;i<MX;i++)
     potencias[i]=0;
-  
-  scanf("%d %d", &valor, &fator);
-  
-  i=0;
-  while(potencias[i-1]<=valor){
-    potencias[i] = pow(fator, i);
-    i++;
-    menor++;
+    i=0;
+    valor=capital;
+    cont=0;
+    notas=0;
+    
+    /*identifica as notas que a casa tem para realizar a troca*/
+    while(potencias[i-1]<=capital){
+      potencias[i] = pow(casa[j], i);
+      i++;
+      notas++;
+    }
+    
+    /*ignora a ultima nota, que sera maior que o valor capital*/
+    notas--;
+    
+    /*printf("Existem %d valores menores do que %d, que sao:\n", menor, capital);
+     * for(i=0;i<menor;i++)
+     *  printf("%d\n", potencias[i]);*/
+    
+    /*realiza as subtracoes com as notas disponiveis ate que valor=0*/
+    i=notas;
+    while(valor>0){
+      /*printf("valor=%d\npot=%d\n", valor, potencias[i]);*/
+      if(valor>=potencias[i]){
+	valor-=potencias[i];
+	cont++;     
+      }
+      else{
+	i--;
+      }
+    }
+    
+    /*apos contar quantas operacoes foram feitas, guarda essa valor no vetor*/
+    casa[j]=cont;
+    /*printf("foram feitas %d operacoes\n", cont);*/
   }
   
-  /*remove o último valor do vetor, que sera maior que o valor da entrada*/
-  menor--;
-    /*menor--;*/
-  
-  printf("Existem %d valores menores do que %d, que sao:\n", menor, valor);
-  for(i=0;i<menor;i++)
-    printf("%d\n", potencias[i]);
-  
-  /**/
-  i=menor;
-  while(valor>0){
-    printf("valor=%d\npot=%d\n", valor, potencias[i]);
-    if(valor>=potencias[i]){
-      valor-=potencias[i];
-      cont++;     
-    }
-    else{
-      i--;
-    }
+  /*compara os resultados, reutilizando a var capital como o menor valor*/
+  capital=casa[0];
+  for(j=0;j<nCasas;j++){
+     if(casa[j]<capital)
+       capital=casa[j];
   }
-      printf("valor=%d\npot=%d\n", valor, potencias[i]);
-  printf("foram feitas %d operacoes\n", cont);
+  
+  /*saida*/
+  printf("Numero minimo de notas = %d\n", capital);
   
   return 0;
 }
