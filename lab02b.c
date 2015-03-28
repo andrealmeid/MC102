@@ -46,26 +46,20 @@ int main(){
     /*ignora a ultima nota, que sera maior que o valor capital*/
     notas--;
     
-    /*printf("Existem %d valores menores do que %d, que sao:\n", menor, capital);
-     * for(i=0;i<menor;i++)
-     *  printf("%d\n", potencias[i]);*/
-    
     /*realiza as subtracoes com as notas disponiveis ate que valor=0*/
     i=notas;
     while(valor>0){
-      /*printf("valor=%d\npot=%d\n", valor, potencias[i]);*/
       if(valor>=potencias[i]){
-	valor-=potencias[i];
-	cont++;     
+    valor-=potencias[i];
+    cont++;     
       }
       else{
-	i--;
+    i--;
       }
     }
     
     /*apos contar quantas operacoes foram feitas, guarda essa valor no vetor*/
     casa[j]=cont;
-    /*printf("foram feitas %d operacoes\n", cont);*/
   }
   
   /*compara os resultados, reutilizando a var capital como o menor valor*/
