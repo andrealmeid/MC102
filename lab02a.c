@@ -6,11 +6,14 @@
 #include <math.h>
 
 int main(){
-  
+    
+  /*variaveis*/
   char x, aux;
   int y=-1, divisor = 0, dividendo = 0;
   double resultado;
   
+  /*entrada*/
+  /*var aux ira descartar o \n da leitura*/
   while(x!='*'){
     scanf("%c", &x);
     if(x!='*'){
@@ -18,17 +21,14 @@ int main(){
       scanf("%c", &aux);
       dividendo += (69-x) * y;
       divisor += y;
-      /*printf("x=%d\n", x);
-      printf("y=%d\n", y);
-      printf("dividendo=%d\n", dividendo);
-      printf("divisor=%d\n", divisor); */
     }
   }
   
+  /*processamento*/
   resultado = (double) dividendo / divisor;
-  /*printf("#dividendo=%d\n", dividendo);*/
-  /*printf("#divisor=%d\n", divisor);*/
-  /*printf("%d\n", y);*/
+  
+  /*saida*/
+  /*verifica o tipo de saida conforme o valor obtido*/
   if  (y >= 0){
     if(y==0){
       resultado = 0;
