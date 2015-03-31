@@ -8,19 +8,25 @@
 
 int main(){
     
-    int l, c, i;
+    int l, c, i, tot[MX];
     char get;
     
-    /*for(i=0;i<MX;i++)
-        tot[i]=0;*/
+    for(i=0;i<MX;i++)
+        tot[i]=0;
     
     
     scanf("%d %d", &l, &c);
     
-    for(i=0;i<l;i++){
-        while(get!=10){
+    for(i=0;i<=l;i++){
+        do{
         scanf("%c", &get);
-        }
+	tot[(int)get-48]+=1;
+        }while(get!=10);
     }
+    
+    for(i=1;i<=c;i++)
+    printf("tot[%d]: %d\n", i, tot[i]);
+    
+    
     return 0;
 }
