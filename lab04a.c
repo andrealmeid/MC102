@@ -24,43 +24,42 @@ int main(){
     
     do{
         scanf("%c", &mov);
-        switch(mov){
-            /*pegar/soltar caixa*/
-            case 'D':
-                if(box==0){
-                    x[pos]-=1;
-                    box=1;
-                }else{
-                    x[pos]+=1;
-                    box=0;
-                }
-                break;
-                
-                /*andar para direita*/            
-                case 'R':
-                    if(box==1 && x[pos]==y){
-                        if(pos<x[0])
-                            pos+=1;
-                    } else 
-                        acidente=1;
-                    break;
-                    
-                    /*andar para esquerda*/            
-                    case 'L':
-                        if(box==1 && x[pos]==y){
-                            if(pos>1)
-                                pos-=1;
-                        } else 
-                            acidente=1;
-                        break;
-        }
+	switch(mov){
+	  case 'D':
+	    if(box==0){
+	      if(x[pos]>0){
+	      x[pos]-=1;
+	      box=1;
+	      }
+	    }else{
+	      x[pos]+=1;
+	      box=0;
+	    }
+	    break;
+	    
+	  case 'R':
+	    if(pos<x[0]){
+	     if(x[pos+1]==y && box==1){
+	     acidente=pos+1;
+	     break;
+	    } else
+	      pos+=1;
+	    }
+	    break;
+	    
+	  case 'L':
+	    if(pos>1)
+	      pos-=1;
+	    break;
+	}
     }while(mov!='*');
     
-    if(!acidente)
+    if(acidente)
         printf("Um acidente ocorreu");
     else{
-        for(i=1;i<=x[0];i++)
+        for(i=1;i<x[0];i++)
             printf("%d ", x[i]);
+	printf("%d\n", x[i]);
     }
     
     printf("\n");
