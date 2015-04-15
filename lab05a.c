@@ -3,11 +3,13 @@
  * Laboratorio 05a - Necronomicon */
 
 #include <stdio.h>
+#include <string.h>
 #define TAM 21
 
 int main(){
     int n, i, j, k;
     char nome[TAM], codigo[TAM], resultado[100];
+    
     
     for(i=0;i<TAM;i++){
         nome[i]='\0';
@@ -20,6 +22,7 @@ int main(){
     scanf("%d", &n);
     
     for(i=0;i<n;i++){
+
         scanf("%s %s", nome, codigo);
         
         /* caso exista um  char diferente, ele sera eliminado 
@@ -33,15 +36,14 @@ int main(){
             }         
         }
         
+        
+        
         /* depois de elimiar os chars diferentes, sera verificado 
          * se o que sobrou eh igual a string original 
          * resultado[i]: 1=diferente; 0=igual */
-        for(j=0;j<TAM-1;j++){
-            if(nome[j]!=codigo[j]){
-                resultado[i]=1;
-                continue;
-            }
-        }
+        if(strlen(codigo)!=strlen(nome))
+	  resultado[i]=1;
+	
     }
     
     /* imprime as respostas conforme o vetor resultado */
@@ -53,4 +55,4 @@ int main(){
     }
     
     return 0;
-}
+    }
