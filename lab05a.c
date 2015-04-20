@@ -5,10 +5,13 @@
 #include <stdio.h>
 #include <string.h>
 #define TAM 21
+#define MAX 100
+#define palavra_igual 0
+#define palavra_diferente 1
 
 int main(){
     int n, i, j, k;
-    char nome[TAM], codigo[TAM], resultado[100];
+    char nome[TAM], codigo[TAM], resultado[MAX];
     
     
     for(i=0;i<TAM;i++){
@@ -16,13 +19,14 @@ int main(){
         codigo[i]='\0';
     }
     
-    for(i=0;i<100;i++)
-        resultado[i]=0;
+    for(i=0;i<MAX;i++)
+        resultado[i]=palavra_igual;
     
+    /* n = numero de palavras */
     scanf("%d", &n);
     
     for(i=0;i<n;i++){
-
+        
         scanf("%s %s", nome, codigo);
         
         /* caso exista um  char diferente, ele sera eliminado 
@@ -38,21 +42,20 @@ int main(){
         
         
         
-        /* depois de elimiar os chars diferentes, sera verificado 
-         * se o que sobrou eh igual a string original 
-         * resultado[i]: 1=diferente; 0=igual */
+        /* depois de eliminar os chars diferentes, sera verificado 
+         * se o tamanho das strings sao iguais; se forem diferentes,
+         * ele ja sinaliza que as palavras nao correspondem*/
         if(strlen(codigo)!=strlen(nome))
-	  resultado[i]=1;
-	
+            resultado[i]=palavra_diferente;
     }
     
     /* imprime as respostas conforme o vetor resultado */
     for(i=0;i<n;i++){
-        if(resultado[i]==0)
+        if(resultado[i]==palavra_igual)
             printf("Sim\n");
         else
             printf("Nao\n");
     }
     
     return 0;
-    }
+}
