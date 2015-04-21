@@ -3,12 +3,16 @@
  * Laboratorio 06a - Raio Sugestor */
 
 #include <stdio.h>
-#include <string.h>
 #define TAM 50
 
 int main(){
     
-    int cidade[50][50], m, n, i, j, r;
+    int cidade[TAM][TAM], m, n, i, j, k, r;
+    
+    
+    for(i=0;i<m;i++)
+        for(j=0;j<n;j++)
+            cidade[i][j]=0;
     
     scanf("%d %d %d", &m, &n, &r);
     
@@ -20,8 +24,9 @@ int main(){
      * como a matriz é quadrada, as duas dimensoes tem o mesmo tamanho */
     r = (2 * r) + 1;
     
-    for
-    
+    for(i=0;i<=m-r;i++)
+        for(j=0;j<=n-r;j++)
+            
     
         return 0;
 }
