@@ -7,7 +7,7 @@
 
 int main(){
     
-    int cidade[TAM][TAM], m, n, i, j, a, b, c, d, r, soma, maior;
+    int cidade[TAM][TAM], m, n, i, j, lim_i, lim_j, inicio_i, inicio_j, r, soma, maior;
     
     /* entrada das dimensoes da matriz (m,n) e do alcance do transmissor (r) */
     scanf("%d %d %d", &m, &n, &r);
@@ -21,31 +21,31 @@ int main(){
      * como a matriz é quadrada, as duas dimensoes tem o mesmo tamanho */
     r = (2 * r) + 1;
     
-    a=r;
-    b=r;
-    c=0;
-    d=0;
+    lim_i=r;
+    lim_j=r;
+    inicio_i=0;
+    inicio_j=0;
     
     /* esses lacos vao verificar todas as possibilidades de posicionamento
      * do transmissor e a soma da populacao atingida em cada posicao */
-    while(a<=m){
+    while(lim_i<=m){
         soma=0;
-        for(i=c;i<a;i++){
-            for(j=d;j<b;j++)
+        for(i=inicio_i;i<lim_i;i++){
+            for(j=inicio_j;j<lim_j;j++)
                 soma+=cidade[i][j];
         }
         
         if(soma>maior)
             maior=soma;
         
-        if(b<n){
-            d++;
-            b++;
+        if(lim_j<n){
+            inicio_j++;
+            lim_j++;
         } else {
-            c++;
-            a++;
-            d=0;
-            b=r;
+            inicio_i++;
+            lim_i++;
+            inicio_j=0;
+            lim_j=r;
         }
         
     }
