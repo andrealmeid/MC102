@@ -6,8 +6,8 @@
 #define TAM 101
 
 int contaminar(int *p1, int *p2, int *p3, int *p4, int *limp){
-  /* como um espaço contamidado pode contaminar os outros, ele pode ser
-     considerado um dispersor */
+  /* como um espaco contamidado pode contaminar os outros, ele pode ser
+   *     considerado um dispersor */
   int retorno=0;
   
   if(*p1==0){
@@ -47,8 +47,8 @@ int main(){
     for(j=0;j<TAM;j++)
       rcnt[i][j]=1;
     
-    /* entrada das dimensoes da matriz (m,n) */
-    scanf("%d %d", &m, &n);
+  /* entrada das dimensoes da matriz (m,n) */
+  scanf("%d %d", &m, &n);
   
   /* entrada dos valores da matriz 
    *       a matriz comeca a ser preenchida da pos[1][1] para que exista
@@ -56,33 +56,35 @@ int main(){
   for(i=1;i<=m;i++)
     for(j=1;j<=n;j++)
       scanf("%d", &rcnt[i][j]);
-  
+    
   /* faz a contagem dos espacos vazios limpos */
-    for(i=1;i<=m;i++)
-      for(j=1;j<=n;j++)
-	if(rcnt[i][j]==0)
-	  limpos++;
-  
+  for(i=1;i<=m;i++)
+    for(j=1;j<=n;j++)
+      if(rcnt[i][j]==0)
+	limpos++;
+	
   /* verificacao e acao dos aspersores */
   while (agiu<0){
-  for(i=1;i<=m;i++)
-    for(j=1;j<=n;j++)
-  	if(rcnt[i][j]==3)
+    agiu=0;
+    for(i=1;i<=m;i++)
+      for(j=1;j<=n;j++)
+	if(rcnt[i][j]==3)
 	  rcnt[i][j]--;
-  agiu=0;
-  for(i=1;i<=m;i++)
-    for(j=1;j<=n;j++)
-      if(rcnt[i][j]==2){
-	 agiu -= contaminar(&rcnt[i+1][j],&rcnt[i-1][j],
-		    &rcnt[i][j-1],&rcnt[i][j+1], &limpos);
+    for(i=1;i<=m;i++)
+      for(j=1;j<=n;j++)
+	if(rcnt[i][j]==2){
+	  agiu -= contaminar(&rcnt[i+1][j],&rcnt[i-1][j],
+			    &rcnt[i][j-1],&rcnt[i][j+1], &limpos);
 	}
-  tempo++;
+    tempo++;
   }
+	
+  /* se todos os espacos vazios estiverem contaminados,
+     imprimir o tempo de contaminacao */
+    if(limpos==0)
+      printf("Tempo = %d\n", tempo);
+    else
+      printf("Perigo: Jedis podem estar vivos\n");
   
-  
-  if(limpos==0)
-    printf("Tempo = %d\n", tempo);
-  else
-    printf("Perigo: Jedis podem estar vivos\n");
-    return 0;
+  return 0;
 }
