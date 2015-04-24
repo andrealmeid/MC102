@@ -7,7 +7,8 @@
 
 int contaminar(int *p1, int *p2, int *p3, int *p4, int *limp){
   /* como um espaco contamidado pode contaminar os outros, ele pode ser
-   *     considerado um dispersor */
+   * considerado um dispersor; nesse metodo, as posicoes sao marcadas com 
+   * o valor 3, que signica pre-contamidas para depois virarem dispersores*/
   int retorno=0;
   
   if(*p1==0){
@@ -39,7 +40,10 @@ int contaminar(int *p1, int *p2, int *p3, int *p4, int *limp){
 
 int main(){
   
-  /* rcnt guarda as caracteristicas do recinto */
+  /* rcnt guarda as caracteristicas do recinto;
+   * tempo é o tempo de dispersao;
+   * limpos guarda os espacos vazios
+   * agiu verifica se alguma contaminacao ocorreu*/
   int rcnt[TAM][TAM], m, n, tempo=0, i, j, limpos=0, agiu=-1;
   
   /* inicializa a matriz preenchendo ela com paredes */
@@ -51,13 +55,13 @@ int main(){
   scanf("%d %d", &m, &n);
   
   /* entrada dos valores da matriz 
-   *       a matriz comeca a ser preenchida da pos[1][1] para que exista
-   *       uma borda de paredes em volta da sala inserida */
+   * a matriz comeca a ser preenchida da pos[1][1] para que exista
+   * uma borda de paredes em volta da sala inserida */
   for(i=1;i<=m;i++)
     for(j=1;j<=n;j++)
       scanf("%d", &rcnt[i][j]);
     
-  /* faz a contagem dos espacos vazios limpos */
+  /* faz a contagem dos espacos vazios sem dispersores*/
   for(i=1;i<=m;i++)
     for(j=1;j<=n;j++)
       if(rcnt[i][j]==0)
