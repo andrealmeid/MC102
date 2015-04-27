@@ -5,35 +5,35 @@
 #include <stdio.h>
 #define TAM 101
 
-int contaminar(int *p1, int *p2, int *p3, int *p4, int *limp){
+int contaminar(int matr[TAM][TAM], int a, int b, int *limp){
   /* como um espaco contamidado pode contaminar os outros, ele pode ser
    * considerado um dispersor; nesse metodo, as posicoes sao marcadas com 
    * o valor 3, que signica pre-contamidas para depois virarem dispersores
-   * p1-p4 sao ponteiros que apontam para as coordenadas dos espacos 
+   * a e b sofrem operacoes para apontarem para os espacos vizinhos
    * o retorno informa se ocorreu alguma contaminacao bem sucedida*/
   
   int retorno=0;
   
-  if(*p1==0){
-    *p1=3;
+  if(matr[a-1][b]==0){
+    matr[a-1][b]=3;
     *limp-=1;
     retorno=1;
   }
   
-  if(*p2==0){
-    *p2=3;
+  if(matr[a+1][b]==0){
+    matr[a+1][b]=3;
     *limp-=1;
     retorno=1;    
   }
   
-  if(*p3==0){
-    *p3=3;
+  if(matr[a][b-1]==0){
+    matr[a][b-1]=3;
     *limp-=1;
     retorno=1;    
   }    
   
-  if(*p4==0){
-    *p4=3;
+  if(matr[a][b+1]==0){
+    matr[a][b+1]=3;
     *limp-=1;
     retorno=1;    
   }    
@@ -83,9 +83,8 @@ int main(){
       for(j=1;j<=n;j++)
 	    if(rcnt[i][j]==2){
 	    /* se o lugar for um dispersor, ele ira passar as coordenadas dos
-	     * espacos vizinhos para o metodo contaminar */
-	        agiu -= contaminar(&rcnt[i+1][j],&rcnt[i-1][j],
-			                   &rcnt[i][j-1],&rcnt[i][j+1], &limpos);
+	     * espacos para o metodo contaminar */
+	        agiu -= contaminar(rcnt, i, j, &limpos);
 	}
     tempo++;
   }
