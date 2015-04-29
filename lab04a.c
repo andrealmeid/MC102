@@ -1,80 +1,74 @@
 /* Nome: André Figueiredo de Almeida
  * RA: 164047
- * Laboratorio 07a - Cargo-Bot - Part II*/
+ * Laboratorio 04a - Cargo-Bot - Part I*/
 
 #include <stdio.h>
-
-#define TRUE 1
-#define FALSE 0
-
-/* braco = posicao do braco; hold = guarda se braco segura uma caixa */
-int braco=0, hold = FALSE, acidente = FALSE;
-
-/* boxes = posicionamento das caixas */
-char boxes[10][10];
-
-
-void executarPrograma(int progAtual, char progMatriz[][62]){
-  char programa[62] = progMatriz[progAtual];
-  int k=0;
-  
-  while(programa[k]!='*'){
-    mover(programa[k], k);
-    k++;
-  }
-}
-
-void mover(char comando, int posicao){
-  switch(comando){
-    case 'L':
-      if(braco<0){
-	if(hold==TRUE && boxes[braco-1][0]!='.'){
-	  acidente=TRUE;
-	} else
-	braco--;
-	break;
-      }
-      
-}
+#include <math.h>
+#define M 11
 
 int main(){
-  
-  /* x = posicoes para empilhamento de caixas; y=numero max de empilhamento
-   * p = num de programas; c = num max de comandos por programa; e = num de 
-   * execucoes de programas */
-  int x, y, p, c, e, i, j;
-  
-  /* sqnc = sequencia dos programas*/
-  char sqnc[60];
-  
-  /* progs = armazena cada programa em uma linha, uma pos extra foi 
-   * adicionada para guardar o asterisco */
-  char progs[9][62];
-  
-  /* entrada da primeira linha */
-  scanf("%d %d %d %d %d", &x, &y, &p, &c, &e);
-  
-  /* entrada das posicoes iniciais das caixas */
-  for(i=0;i<x;i++)
-    scanf("%s", boxes[i]);
-  
-  for(i=0;i<x;i++)
-    for(j=0;j<y;j++)
-      printf("%c", boxes[i][j]);
     
-    scanf(" ");
-  /* entrada da sequencia de execucao dos programas */
-  for(i=0;i<e;i++)
-    scanf("%c", &sqnc[i]);
-  
-  /* entrada dos comandos dos programas */
-  for(i=0;i<p;i++)
-    scanf("%s", progs[i]);
-  
-  for(i=0;i<e;i++){
-    executarPrograma(i, progs); 
+    /*box = 0 sem caixa; box = 1 com  caixa*/
+    /*y guarda a altura maxima; pos guarda a posicao*/
+    int x[M], y, i, pos = 1, box = 0, acidente=0;
+    char mov;
     
-  }
-  
-  return 0;
+    for(i=0;i<M;i++)
+        x[i]=0;
+    
+    /*a posicao 0 do vetor guarda o numero de posicoes de empilhamento*/
+    scanf("%d %d", &x[0], &y);
+    
+    /*cada x[i>0] do vetor guarda seu respectivo numero de caixas*/
+    for(i=1;i<=x[0];i++)
+        scanf("%d", &x[i]);
+    
+    do{
+        scanf("%c", &mov);
+        switch(mov){
+            /*verifica se existe caixa a ser pega*/
+            case 'D':
+                if(box==0){
+                    if(x[pos]>0){
+                        x[pos]-=1;
+                        box=1;
+                    }
+                }else{
+                    x[pos]+=1;
+                    box=0;
+                }
+                break;
+            /*verifica se existe a prox posicao e se nao ocorreu acidente*/
+            case 'R':
+                if(pos<x[0]){
+                    if(x[pos+1]==y && box==1){
+                        acidente=pos+1;
+                    } else
+                        pos+=1;
+                }
+                break;
+            /*a mesma coisa do caso R, so que para esquerda*/
+            case 'L':
+                if(pos>1){
+                    if(x[pos-1]==y && box==1){
+                        acidente=pos+1;
+                    } else
+                        pos-=1;
+                    break;
+                }
+        }
+    }while(mov!='*');
+    
+    
+    /*imprime o resultado*/
+    if(acidente)
+        printf("Um acidente ocorreu");
+    else{
+        for(i=1;i<x[0];i++)
+            printf("%d ", x[i]);
+        printf("%d", x[i]);
+    }
+    
+    printf("\n");
+    return 0;
 }
