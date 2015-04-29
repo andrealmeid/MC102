@@ -28,10 +28,8 @@ int main(){
    scanf("%d %d %d %d %d", &x, &y, &p, &c, &e);
    
    /* entrada das posicoes iniciais das caixas */
-   scanf("");
    for(i=0;i<x;i++)
-      for(j=0;j<y;j++)
-         scanf("%c", &boxes[i][j]);
+         scanf("%s", boxes[i]);
    
    for(i=0;i<x;i++)
       for(j=0;j<y;j++)
@@ -39,22 +37,22 @@ int main(){
       
    printf("BOXES OK\n");
    
-   /* entrada da sequencia de execucao dos programas *   
+   /* entrada da sequencia de execucao dos programas */
    for(i=0;i<e;i++)
       scanf("%d", &sqnc[i]);
    printf("SQNC OK\n");
    
    /* entrada dos comandos dos programas; quando for encontrado o fim (*) do
     * programa, o preenchimento daquela linha é esgotado e pula pra prox 
-    * j<=c para poder armazenar o asterisco * 
+    * j<=c para poder armazenar o asterisco */
    for(i=0;i<p;i++)
       for(j=0;j<=c;j++){
-         scanf("%c", &progs[i][j]);
+         scanf("%s", progs[i][j]);
          if(progs[i][j]=='*')
             j=c;
          printf("PROGS LINHA OK\n");
       }
-   printf("PROGS OK\n");*/
+   printf("PROGS OK\n");
 
    
       
