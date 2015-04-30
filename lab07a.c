@@ -59,10 +59,9 @@ int main(){
    for(k=0;k<e;k++){
       i=0;
       num=sqnc[k]-'1';
-      printf("%d\n", num);
       while(progs[num][i]!='*'){
          j=0;
-         switch(progs[0][i]){
+         switch(progs[num][i]){
             case 'D':
                if(hold=='.'){
                   while(boxes[j][garra]=='.' && j<y-1)
@@ -97,9 +96,14 @@ int main(){
                if(hold!='G')
                   i++;
                break;
+            
+            case 'N':
+               if(hold!='.')
+                  i++;
+               break;
          }
-         /*printf("comando=%c j=%d garra=%d hold=%c",progs[0][i], j, garra, hold);
-          *   printf("\n");          */
+         printf("comando=%c j=%d garra=%d hold=%c",progs[num][i], j, garra, hold);
+             printf("\n");          
          
          
          i++;
