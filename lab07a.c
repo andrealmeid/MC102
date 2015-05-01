@@ -18,7 +18,7 @@ int main(){
    int p, c;
    
    /* e = num de execucoes de programas; i, j, k, l = contadores */
-   int e, i, j, k, l, num;
+   int e, i, j, k, num;
    
    /* boxes = posicionamento das caixas */
    char boxes[10][10];
@@ -80,11 +80,19 @@ int main(){
             case 'R':
                if(garra<x-1)
                   garra++;
+               if(boxes[0][garra]!='.' && hold!='.'){
+                  acidente=TRUE;
+                  k=e;
+               }
                break;
                
             case 'L':
                if(garra>0)
                   garra--;
+               if(boxes[0][garra]!='.' && hold!='.'){
+                  acidente=TRUE;
+                  k=e;
+               }
                break;
                
             case 'B':
@@ -112,9 +120,12 @@ int main(){
       }
    }
    
+   if(acidente==FALSE)
    for(i=0;i<y;i++){
       printf("%s", boxes[i]);
       printf("\n");    
       }
+   else 
+      printf("Um acidente ocorreu\n");
    return 0;
 }
