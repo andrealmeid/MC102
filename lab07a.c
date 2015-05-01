@@ -78,7 +78,7 @@ int main(){
                break;
                
             case 'R':
-               if(garra<x)
+               if(garra<x-1)
                   garra++;
                break;
                
@@ -101,10 +101,12 @@ int main(){
                if(hold!='.')
                   i++;
                break;
-         }
-         printf("comando=%c j=%d garra=%d hold=%c",progs[num][i], j, garra, hold);
-             printf("\n");          
-         
+            
+            case 'A':
+               if(hold=='.')
+                  i++;
+               break;
+         }      
          
          i++;
       }
