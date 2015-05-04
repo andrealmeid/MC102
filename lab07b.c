@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-#define TAM 50
+#define TAM 51
 #define FALSE 0
 #define TRUE 1
 
@@ -12,10 +12,10 @@ int main(){
    
    /* mapa armazena as casas do tabuleiro, n = linhas, m = colunas */
    char mapa[TAM][TAM], mapaLoop[TAM][TAM], peca;
-   int n, m, fim, loop;
+   int n, m, fim, loop = 0;
    
    /* pos = posicao atual; mov = numero de movimentos */
-   int posX, posY, mov = 0, i, j;
+   int posX, posY, mov = 0, i, j, k, l;
    
    for(i=0;i<TAM;i++)
       for(j=0;j<TAM;j++)
@@ -34,11 +34,14 @@ int main(){
       posY=i;
       mov=0;
       peca = mapa[i][0];
+      loop=0;
+      for(k=0;k<TAM;k++)
+         for(l=0;l<TAM;l++)
+            mapaLoop[k][l]=0;
       
       while(fim==FALSE){      
          switch(peca){
             case 'R':
-               mapaLoop
                posX++;
                break;
                
@@ -55,36 +58,33 @@ int main(){
                break;
                
             case 'X':
-               printf("Armadilha em (%d,%d) apos %d passo(s)",
+               printf("Armadilha em (%d,%d) apos %d passo(s)\n",
                       posY+1, posX+1, mov);
                fim=TRUE;
                break;
                
          }
          
+         
          if(posX>m-1){
-            printf("Saiu em em (%d,%d) apos %d passo(s)\n", 
+            printf("Saiu em (%d,%d) apos %d passo(s)\n", 
                    posY+1, posX, mov);
             fim=TRUE;
          }
          
-         if(
+         mapaLoop[posY][posX]++;
+         if(mapaLoop[posY][posX]>=2){
+            if(mapaLoop[posY][posX]==3){
+               printf("Loop de tamanho %d\n", loop);
+               fim=TRUE;
+            } else
+               loop++;
+         }
          
          mov++;
          peca = mapa[posY][posX];
-         printf("peça: %c ", peca);
-         
-         printf("pos(%d,%d)\n", posY, posX);
-         
-         
-         if(mov>40)
-            fim=TRUE;
       }
-      
-      printf("n=%d\n", i);
    }
-   
-   
-   
+ 
    return 0;
 }
