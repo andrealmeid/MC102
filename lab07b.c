@@ -11,12 +11,15 @@
 int main(){
    
    /* mapa armazena as casas do tabuleiro, n = linhas, m = colunas */
-   char mapa[TAM][TAM], peca;
-   int n, m, fim;
+   char mapa[TAM][TAM], mapaLoop[TAM][TAM], peca;
+   int n, m, fim, loop;
    
    /* pos = posicao atual; mov = numero de movimentos */
    int posX, posY, mov = 0, i, j;
    
+   for(i=0;i<TAM;i++)
+      for(j=0;j<TAM;j++)
+         mapaLoop[i][j]=0;
    
    scanf("%d %d", &n, &m);
    
@@ -35,6 +38,7 @@ int main(){
       while(fim==FALSE){      
          switch(peca){
             case 'R':
+               mapaLoop
                posX++;
                break;
                
@@ -49,14 +53,22 @@ int main(){
             case 'D':
                posY++;
                break;
+               
+            case 'X':
+               printf("Armadilha em (%d,%d) apos %d passo(s)",
+                      posY+1, posX+1, mov);
+               fim=TRUE;
+               break;
+               
          }
          
          if(posX>m-1){
             printf("Saiu em em (%d,%d) apos %d passo(s)\n", 
-                   posY+1, posX+1, mov);
+                   posY+1, posX, mov);
             fim=TRUE;
          }
          
+         if(
          
          mov++;
          peca = mapa[posY][posX];
@@ -64,11 +76,6 @@ int main(){
          
          printf("pos(%d,%d)\n", posY, posX);
          
-         if(posX>m-1){
-            printf("Saiu em em (%d,%d) apos %d passo(s)\n", 
-                   posY+1, posX+1, mov);
-            fim=TRUE;
-         }
          
          if(mov>40)
             fim=TRUE;
