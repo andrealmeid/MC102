@@ -17,7 +17,8 @@ int main(){
    /* p = num de programas; c = num max de comandos de programas*/
    int p, c;
    
-   /* e = num de execucoes de programas; i, j, k, l = contadores */
+   /* e = num de execucoes de programas; i, j, k = contadores 
+    * num serve de variavel auxiliar para uma conversao */
    int e, i, j, k, num;
    
    /* boxes = posicionamento das caixas */
@@ -55,13 +56,16 @@ int main(){
       scanf("%s", progs[i]);
    
    /*PROCESSAMENTOS*/
-
+   /* o loop percorre o vetor executando os programas */
    for(k=0;k<e;k++){
       i=0;
+      /* conversao char -> int = char - '1' */
       num=sqnc[k]-'1';
+      /* para o loop quando encotnar o fim do programa (*) */
       while(progs[num][i]!='*'){
          j=0;
          switch(progs[num][i]){
+            /* pegar/soltar caixa */
             case 'D':
                if(hold=='.'){
                   while(boxes[j][garra]=='.' && j<y-1)
@@ -76,25 +80,25 @@ int main(){
                   hold='.';
                }
                break;
-               
+            
+            /* move para direita se for possivel */   
             case 'R':
                if(garra<x-1)
                   garra++;
-               if(boxes[0][garra]!='.' && hold!='.'){
+               if(boxes[0][garra]!='.' && hold!='.')
                   acidente=TRUE;
-                  k=e;
-               }
                break;
                
+            /* move para esquerda se for possivel */   
             case 'L':
                if(garra>0)
                   garra--;
-               if(boxes[0][garra]!='.' && hold!='.'){
+               if(boxes[0][garra]!='.' && hold!='.')
                   acidente=TRUE;
-                  k=e;
-               }
                break;
                
+            /* nesse bloco, se as condicoes nao forem verdadeiras,
+             * o programa pula a proxima instrucao. se forem, ele as executa */
             case 'B':
                if(hold!='B')
                   i++;
@@ -116,14 +120,19 @@ int main(){
                break;
          }      
          
+         /* se ocorreu algum acidente, quebra o loop */
+         if(acidente==TRUE)
+            k=e;
+         
          i++;
       }
    }
    
+   /* imprime as posicoes das caixas se nenhum acidente ocorreu */
    if(acidente==FALSE)
-   for(i=0;i<y;i++){
-      printf("%s", boxes[i]);
-      printf("\n");    
+      for(i=0;i<y;i++){
+         printf("%s", boxes[i]);
+         printf("\n");    
       }
    else 
       printf("Um acidente ocorreu\n");
