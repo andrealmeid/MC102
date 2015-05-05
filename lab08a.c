@@ -7,17 +7,20 @@
 
 /* realiza a adicao n1+n2, armazendo o resultado em result */
 void add(int *n1, int tam_n1, int *n2, int tam_n2, int *result) { 
-   int i;   
+   int i, j;   
       
-   for(i=0;i<tam_n1;i++)
-         *result += n1[i] + n2[i];
+   for(i=tam_n1-1, j=tam_n2-1; i<=0; i--, j--){
+         result[i] = n1[i] + n2[j];
+         printf("%d", result[i]);
+   }
+	 printf("\n");
    
 }
 
 
 int main() {    
    
-   int x, y, *n1, *n2, *result, i;
+   int x, y, *n1, *n2, *result, i, z;
    char c, aux;
    
    scanf("%d %d %c", &x, &y, &c);
@@ -25,24 +28,30 @@ int main() {
    n1 = malloc(x * sizeof(int));
    n2 = malloc(y * sizeof(int));
 
+   scanf(" ");
    for(i=0;i<x;i++){
-      scanf("%c", aux);
+      scanf("%c", &aux);
       n1[i]= aux - '0';
-      printf("%d", *n1);
    }
    
-   printf("%d\n", *n1);
+   scanf(" ");
+   for(i=0;i<y;i++){
+      scanf("%c", &aux);
+      n2[i]= aux - '0';
+   }
    
    switch(c){
       case 'A':
-         result = malloc(x+1 * sizeof(int));
+	 z = x+1;
+         result = malloc(z * sizeof(int));
          add(n1, x, n2, y, result);
          break; 
 
    }
-   
-   printf("%d\n", *result);
-   
-   
+   /*
+   for(i=0;i<z;i++)
+   printf("%d", result[i]);
+   printf("\n");
+   */
    return 0;
 }
