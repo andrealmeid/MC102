@@ -42,12 +42,18 @@ void substract(int *n1, int tam_n1, int *n2, int tam_n2, int *result) {
 
    }
    
-   for(;i<tam_n1;i++)
-      result[i]=n1[i];  
+   for(;i<tam_n1;i++){
+      if(n1[i]>=0)
+         result[i]=n1[i];  
+      else{
+         n1[i]+=10;
+         n1[i+1]--;
+         result[i]=n1[i];  
+      }
+   }
    
-   for(i=tam_n1-1; i>0; i--)
-      if(result[i]==0)
-         tam_n1--;
+   for(i=tam_n1-1; result[i]==0 && i>0; i--)
+      tam_n1--;
    
    for(i=tam_n1-1;i>=0;i--)
       printf("%d", result[i]);
