@@ -61,6 +61,12 @@ void substract(int *n1, int tam_n1, int *n2, int tam_n2, int *result) {
    printf("\n");
 }
 
+/* realiza a multiplicacao n1*n2, armazendo o resultado em result */
+void multiply(int *n1, int tam_n1, int *n2, int tam_n2, int *result) {
+    
+}
+
+
 
 int main() {    
    
@@ -91,19 +97,20 @@ int main() {
          result = malloc(z * sizeof(int));
          for(i=0;i<z;i++)
             result[i]=0;
-         
          add(n1, x, n2, y, result);
          break;
          
       case 'S':
          result = malloc(x * sizeof(int));
-         for(i=0;i<x;i++)
-            result[i]=0;
          substract(n1, x, n2, y, result);
          break;
          
-         
-         
+      case 'M':
+         z = x+y;
+         result = malloc(z * sizeof(int));
+         multiply(n1, x, n2, y, result);
+         break;
+             
    }
    /*
     *  for(i=0;i<z;i++)
