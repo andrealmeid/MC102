@@ -65,24 +65,25 @@ void substract(int *n1, int tam_n1, int *n2, int tam_n2, int *result) {
 /* realiza a multiplicacao n1*n2, armazendo o resultado em result */
 void multiply(int *n1, int tam_n1, int *n2, int tam_n2, int *result) {
 int i, j, tam;
-	for(i=0;i<tam_n2;i++)
-		for(j=0;j<tam_n1;j++){
-			result[j+i]+=n2[i]*n1[j];
-			if(result[j+i]>9){
-				result[j+i+1]+=result[j+i]/10;
-				result[j+i]=result[j+i]%10;
-			}
-		}
-	
-	tam = tam_n1 + tam_n2;
-	
-	for(i=tam; result[i]==0 && i>0; i--)
+   for(i=0;i<tam_n2;i++)
+      for(j=0;j<tam_n1;j++){
+         result[j+i]+=n2[i]*n1[j];
+         if(result[j+i]>9){
+            result[j+i+1]+=result[j+i]/10;
+            result[j+i]=result[j+i]%10;
+         }
+      }
+   
+   tam = tam_n1 + tam_n2;
+   
+   for(i=tam-1; result[i]==0 && i>0; i--)
       tam--;
-	
-	
-   for(i=tam;i>=0;i--)
+   
+   
+   for(i=tam-1;i>=0;i--)
       printf("%d", result[i]);   
    printf("\n");
+   
 }
 
 
@@ -127,7 +128,7 @@ int main() {
       case 'M':
          z = x+y;
          result = malloc(z * sizeof(int));
-		for(i=0;i<z;i++)
+      for(i=0;i<z;i++)
             result[i]=0;
          multiply(n1, x, n2, y, result);
          break;
