@@ -74,7 +74,7 @@ int i, j, final;
    
    for(i=0;i<W;i++){
       for(j=0;j<H;j++){
-         final = c + pow(img[i][j], gama);
+         final = c * pow(img[i][j], gama);
          if(final>MaxV)
             final=MaxV;
          img[i][j] = floor(final);
@@ -87,6 +87,13 @@ int i, j, final;
 
 /* Espelhamento */
 void espelhamento(int img[][MAX_TAM], int W, int H) {
+	int i, j;
+
+	for(i=0;i<W;i++){
+		for(j=0;j<H/2;j++){
+			img[i][j]=img[i][W-j-1];
+		}
+	}
 
 }
 
@@ -140,4 +147,3 @@ int main() {
 
     return 0;
 }
-
