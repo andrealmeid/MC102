@@ -99,7 +99,19 @@ void espelhamento(int img[][MAX_TAM], int W, int H) {
 
 /* Reducao de Ruidos com Filtro Gaussiano */
 void reducaoRuido(int img[][MAX_TAM], int W, int H, int MaxV) {
-
+	int i, j, aux[W][H];
+	
+	for(i=1;i<W-1;i++){
+		for(j=1;j<H-1;j++){
+			aux[i][j]=((1*img[i-1][j-1])+(2*img[i][j-1])+(1*img[i+1][j-1])
+					   (2*img[i-1][j])  +(4*img[i][j])  +(2*img[i+1][j])
+					   (1*img[i-1][j+1])+(2*img[i][j+1])+(1*img[i+1][j+1]))/16
+		}
+	}
+	
+	for(i=1;i<W-1;i++)
+		for(j=1;j<H-1;j++)
+			img[i][j]=aux[i][j];
 }
 
 /* Rotacao 90 graus */
