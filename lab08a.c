@@ -135,5 +135,9 @@ int main() {
              
    }
    
+   free(n1);
+   free(n2);
+   free(result);
+   
    return 0;
 }
