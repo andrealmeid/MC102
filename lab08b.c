@@ -72,6 +72,8 @@ void potencia(int img[][MAX_TAM], int W, int H, int MaxV,
               double c, double gama) {
 int i, j, final;
    
+   /* faz a operacao usando a formula c x f(i,j)^gama e verifica se nao
+    * ultrapassou o valor maximo */
    for(i=0;i<H;i++){
       for(j=0;j<W;j++){
          final = c * pow(img[i][j], gama);
@@ -80,52 +82,54 @@ int i, j, final;
          img[i][j] = floor(final);
       }
    }
-      
-   
-   
+ 
 }
 
 /* Espelhamento */
 void espelhamento(int img[][MAX_TAM], int W, int H) {
-	int i, j;
+   int i, j;
 
-	for(i=0;i<H;i++)
-		for(j=0;j<W/2;j++)
-			img[i][j]=img[i][W-j-1];
+   /* espelha a metade direita da imagem na metade esquerda */
+   for(i=0;i<H;i++)
+      for(j=0;j<W/2;j++)
+         img[i][j]=img[i][W-j-1];
 
 }
 
 /* Reducao de Ruidos com Filtro Gaussiano */
 void reducaoRuido(int img[][MAX_TAM], int W, int H, int MaxV) {
-	int i, j, aux[MAX_TAM][MAX_TAM];
-	
-	for(i=1;i<H-1;i++){
-		for(j=1;j<W-1;j++){
-			aux[i][j]=((1*img[i-1][j-1])+(2*img[i][j-1])+(1*img[i+1][j-1]) +
-					   (2*img[i-1][j])  +(4*img[i][j])  +(2*img[i+1][j]) +
-					   (1*img[i-1][j+1])+(2*img[i][j+1])+(1*img[i+1][j+1]))/16;
-		}
-	}
-	
-	for(i=1;i<H-1;i++)
-		for(j=1;j<W-1;j++)
-			img[i][j]=aux[i][j];
+   int i, j, aux[MAX_TAM][MAX_TAM];
+   
+   /* aplica o filtro nos pontos que nao pertencem a borda
+    * e guarda os valores em uma matriz auxiliar */
+   for(i=1;i<H-1;i++){
+      for(j=1;j<W-1;j++){
+         aux[i][j]=floor((1*img[i-1][j-1])+(2*img[i][j-1])+(1*img[i+1][j-1]) +
+                  (2*img[i-1][j])  +(4*img[i][j])  +(2*img[i+1][j]) +
+                  (1*img[i-1][j+1])+(2*img[i][j+1])+(1*img[i+1][j+1]))/16;
+      }
+   }
+   
+   for(i=1;i<H-1;i++)
+      for(j=1;j<W-1;j++)
+         img[i][j]=aux[i][j];
 }
 
 /* Rotacao 90 graus */
 void rotacao(int img[][MAX_TAM], int W, int H) {
-	int i, j, aux[MAX_TAM][MAX_TAM];
-	
-	for(i=0;i<H;i++){
-		for(j=0;j<W;j++){
-			aux[W-j-1][i]=img[i][j];
-		}
-	}
-	
-	for(i=0;i<W;i++)
-		for(j=0;j<H;j++)
-			img[i][j]=aux[i][j];
-	
+   int i, j, aux[MAX_TAM][MAX_TAM];
+   
+   /* muda a posicao dos pixels da imagem */
+   for(i=0;i<H;i++){
+      for(j=0;j<W;j++){
+         aux[W-j-1][i]=img[i][j];
+      }
+   }
+   
+   for(i=0;i<W;i++)
+      for(j=0;j<H;j++)
+         img[i][j]=aux[i][j];
+   
 }
 
 int main() {
