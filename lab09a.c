@@ -9,19 +9,23 @@ int main(){
    
    int m, n, **campo, i, j, k, aux;
    
-   int *linhas, *colunas, *dp, *ds;
+   int *linhas, *colunas, *dp;
    
    
    scanf("%d %d", &m, &n);
    
    linhas = malloc(m * sizeof(int));
    colunas = malloc(n * sizeof(int));
+   dp = malloc(m+n * sizeof(int));
    
    for(i=0;i<m;i++)  
       linhas[i]=0;
    
    for(i=0;i<n;i++)  
       colunas[i]=0;
+   
+    for(i=0;i<m+n;i++)  
+      dp[i]=0;
    
    campo = malloc(m * sizeof(int));
    for(i=0;i<m;i++)
@@ -49,10 +53,13 @@ int main(){
    while(i+j+aux>m+n){
       i=k;
       while(i>m || j>n){
-         j = k + i;
          dp[k]+=campo[i][j];
+		 i++;
+		 j++;
       }
-         
+	printf("%d\n", dp[k]);
+      k++;
+   }    
    
    
    /*for(i=0;i<m;i++)
