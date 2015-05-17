@@ -14,7 +14,7 @@ int disparos(int a){
 
 int main(){
     
-    int m, n, **campo, i, j, k, l, aux, total, maior=0, xMaior=0, yMaior=0;
+    int m, n, **campo, i, j, k, l, total, maior=0, xMaior=0, yMaior=0;
     
     int *linhas, *colunas, dp=0, ds=0, dMaior=5, disp=0;
     
@@ -31,7 +31,7 @@ int main(){
         colunas[i]=0;
     
     
-    campo = malloc(m * sizeof(int));
+    campo = malloc(m * sizeof(int*));
     for(i=0;i<m;i++)
         campo[i] = malloc(n * sizeof(int));
     
@@ -104,11 +104,6 @@ int main(){
                     xMaior=i;
                     yMaior=j;
                 }
-
-                if(total==maior && disp==dMaior){
-                    if(xMaior+yMaior<i+j)
-                        i=i-0;
-                }
             }
         }
     }
@@ -118,20 +113,11 @@ int main(){
     printf("Droids = %d\n", maior);
     printf("Disparos = %d\n", dMaior);
     
-    /*for(i=0;i<m;i++)
-     *     printf("linha[%d]=%d\n", i+1, linhas[i]);
-     *  printf("\n");
-     *  
-     *  for(i=0;i<n;i++)
-     *     printf("%d ", colunas[i]);
-     *  printf("\n");*/
-    
-    /*for(i=0;i<m;i++){
-     *     for(j=0;j<n;j++){
-     *        printf("%d ", campo[i][j]);
-}
-printf("\n");
-}*/
+    free(linhas);
+    free(colunas);
+    for(i=0;i<m;i++)
+        free(campo[i]);
+    free(campo);
     
     return 0;
 }
