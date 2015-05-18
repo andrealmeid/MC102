@@ -62,13 +62,6 @@ int main(){
         negativar(jogadores, nJogadores, maior);
     }
     
-    for(i=0;i<nJogadores;i++){
-        for(j=0;j<nJogadores;j++){
-            printf("%.1f ", jogadores[i][j]);
-        }
-        printf("\n");
-    }
-    
     for(i=1;i<jTimes;i++){
         for(j=0;j<nTimes;j++){
             maior=0;
@@ -80,15 +73,7 @@ int main(){
             time[j][i]=maior;
             negativar(jogadores, nJogadores, maior);
             
-            for(i=0;i<nTimes;i++){
-                for(j=0;j<nJogadores;j++){
-                            capitao=time[i][0];
-                printf("%.1f ", jogadores[capitao][j]);
-            }
-            printf("\n");
-            }
         }
-        printf("\n");
     }
     
     
@@ -101,6 +86,14 @@ int main(){
         }
         printf("\n");
     }
+    
+    free(media);
+    for(i=0;i<nTimes;i++)
+        free(time[i]);
+    free(time);
+    for(i=0;i<nJogadores;i++)
+        free(jogadores[i]);
+    free(jogadores);
     
     return 0;
 }
