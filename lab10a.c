@@ -32,10 +32,10 @@ int main(){
     
     scanf("%d %d %d %d", &d, &f, &l, &m);
     
-    aux =  malloc(m * sizeof(char));
+    aux =  malloc(m+1 * sizeof(char));
     palavras = malloc(d * sizeof(Palavra));
     for(i=0;i<d;i++)
-        palavras[i].nome = malloc(m * sizeof(char));
+        palavras[i].nome = malloc(m+1 * sizeof(char));
     
     scanf("%s", aux);
     
@@ -50,7 +50,7 @@ int main(){
                 i=n;
             }
         }
-        if(strlen(aux)>=l && add==FALSE){
+        if(strlen(aux)>=l && strlen(aux)<=m && add==FALSE){
             strcpy(palavras[n].nome, aux);
             palavras[n].cont=1;
             n++;
@@ -80,7 +80,7 @@ int main(){
     add = TRUE;
     while(add){
         add = FALSE;
-        for(i=0;i<n;i++){
+        for(i=0;i<n-1;i++){
             if(strcmp(palavras[i].nome, palavras[i+1].nome)>0 && 
                 palavras[i].cont==palavras[i+1].cont){
                 strcpy(aux, palavras[i].nome); 
@@ -94,7 +94,7 @@ int main(){
     for(i=0;palavras[i].cont>=f;i++){
             printf("%s %d\n", palavras[i].nome, palavras[i].cont);
     }
-    
+
     free(aux);
     for(i=0;i<d;i++)
         free(palavras[i].nome);
