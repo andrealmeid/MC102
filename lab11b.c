@@ -23,6 +23,10 @@ void inicializaStruct(time_t time[]){
 		time[i].nome[0]=' ';
 		time[i].pontos=0;
 		time[i].vitorias=0;
+		time[i].pontosGanhos=0;
+		time[i].pontosPerdidos=0;
+		time[i].setsGanhos=0;
+		time[i].setsPerdidos=0;
 	}
 	
 }
@@ -46,7 +50,10 @@ int leString(time_t time[]){
 			return i;		
 		}	
 	}	
+	
+	return 0;
 }
+
 
 /* Atualiza os atributos relativos aos sets e aos pontos */
 void atualizaSetsPontos(time_t *time, int setsGanhos, int setsPerdidos, 
@@ -75,19 +82,34 @@ void atualizaPartida(time_t *timeGanhador, time_t *timePerdedor,
 
 /* Le os resultados das partidas entre todos os times de uma chave */
 void leResultadosChave(time_t timesChave[], int confrontoDireto[][6]) {
-	int  n=0, find=FALSE, indiceA, indiceB;
-	
+	int  indiceA, indiceB, i;
+	int n1, n2;
+	char aux;
 	inicializaStruct(timesChave);
 	
-	while(n<15){
+	for(i=0;i<MAX;i++){
 		
 		indiceA = leString(timesChave);
 		indiceB = leString(timesChave);
 
-		indiceA++;
-		indiceB++;
-		
-		n++;
+		do{			
+			scanf("%d-%d%c", &n1, &n2, &aux);
+			if(n1>n2){
+				atualizaSetsPontos(&timesChave[indiceA], 1, 0, 
+                        n1, n2);
+				atualizaSetsPontos(&timesChave[indiceB], 0, 1, 
+                        n2, n1);
+			} else {
+				atualizaSetsPontos(&timesChave[indiceA], 0, 1, 
+                        n1, n2);
+				atualizaSetsPontos(&timesChave[indiceB], 1, 0, 
+                        n2, n1);
+			}
+		}while(aux!='\n');
+	}
+	
+	for(i=0;i<MAX;i++){
+		printf("%s: %d\n", timesChave[i].nome, timesChave[i].pontosGanhos);
 	}
 }
 
