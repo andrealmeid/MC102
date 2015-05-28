@@ -17,41 +17,41 @@ struct time {
 typedef struct time time_t;
 
 void inicializaStruct(time_t time[]){
-	int i;	
-	
-	for(i=0;i<MAX;i++){
-		time[i].nome[0]=' ';
-		time[i].pontos=0;
-		time[i].vitorias=0;
-		time[i].pontosGanhos=0;
-		time[i].pontosPerdidos=0;
-		time[i].setsGanhos=0;
-		time[i].setsPerdidos=0;
-	}
-	
+    int i;  
+    
+    for(i=0;i<MAX;i++){
+        time[i].nome[0]=' ';
+        time[i].pontos=0;
+        time[i].vitorias=0;
+        time[i].pontosGanhos=0;
+        time[i].pontosPerdidos=0;
+        time[i].setsGanhos=0;
+        time[i].setsPerdidos=0;
+    }
+    
 }
 
 int leString(time_t time[]){
-	char aux[21];
-	int i;
-	
-	scanf("%s", aux);
+    char aux[21];
+    int i;
+    
+    scanf("%s", aux);
 
-	for(i=0;i<MAX;i++){
-			if(strcmp(time[i].nome,aux)==0){
-				return i;
-			}
-		}
-			
-	for(i=0;i<MAX;i++){
-		if(strncmp(" ", time[i].nome,1)==0){
-			strcpy(time[i].nome, aux);
-			time[i].indice = i;
-			return i;		
-		}	
-	}	
-	
-	return 0;
+    for(i=0;i<MAX;i++){
+            if(strcmp(time[i].nome,aux)==0){
+                return i;
+            }
+        }
+            
+    for(i=0;i<MAX;i++){
+        if(strncmp(" ", time[i].nome,1)==0){
+            strcpy(time[i].nome, aux);
+            time[i].indice = i;
+            return i;       
+        }   
+    }   
+    
+    return 0;
 }
 
 
@@ -82,40 +82,55 @@ void atualizaPartida(time_t *timeGanhador, time_t *timePerdedor,
 
 /* Le os resultados das partidas entre todos os times de uma chave */
 void leResultadosChave(time_t timesChave[], int confrontoDireto[][6]) {
-	int  indiceA, indiceB, i;
-	int n1, n2;
-	char aux;
-	inicializaStruct(timesChave);
-	
-	for(i=0;i<MAX;i++){
-		
-		indiceA = leString(timesChave);
-		indiceB = leString(timesChave);
+    int  indiceA, indiceB, i;
+    int n1, n2, setsA=0, setsB=0;
+    char aux;
+    
+    inicializaStruct(timesChave);
+    
+    
+    for(i=0;i<15;i++){
+        
+        indiceA = leString(timesChave);
+        indiceB = leString(timesChave);
 
-		do{			
-			scanf("%d-%d%c", &n1, &n2, &aux);
-			if(n1>n2){
-				atualizaSetsPontos(&timesChave[indiceA], 1, 0, 
-                        n1, n2);
-				atualizaSetsPontos(&timesChave[indiceB], 0, 1, 
-                        n2, n1);
-			} else {
-				atualizaSetsPontos(&timesChave[indiceA], 0, 1, 
-                        n1, n2);
-				atualizaSetsPontos(&timesChave[indiceB], 1, 0, 
-                        n2, n1);
-			}
-		}while(aux!='\n');
-	}
-	
-	for(i=0;i<MAX;i++){
-		printf("%s: %d\n", timesChave[i].nome, timesChave[i].pontosGanhos);
-	}
+        do {         
+            scanf("%d-%d%c", &n1, &n2, &aux);
+            if(n1>n2){
+                atualizaSetsPontos(&timesChave[indiceA], 1, 0, n1, n2);
+                atualizaSetsPontos(&timesChave[indiceB], 0, 1, n2, n1);
+                setsA++;
+            } else {
+                atualizaSetsPontos(&timesChave[indiceA], 0, 1, n1, n2);
+                atualizaSetsPontos(&timesChave[indiceB], 1, 0, n2, n1);
+                setsB++;
+            }
+        } while(aux!='\n');
+        
+        if(setsA>setsB){
+            atualizaPartida(&timesChave[indiceA], &timesChave[indiceB], setsA-setsB,
+                            confrontoDireto);
+        } else {
+            atualizaPartida(&timesChave[indiceB], &timesChave[indiceA], setsB-setsA,
+                            confrontoDireto);
+        }
+
+    }
 }
 
 /* Ordena o vetor de times */
-void ordenaTimes(time_t times[], int n, int confrontoDireto[][6]) {
-
+void ordenaTimes(time_t times[], int n, int confrontoDireto[][6]){
+    int i, j, tmp;
+    
+    for (i=1;i<n;i++) {
+        j = i;
+        while (j>0 && times[j-1].pontos > times[j].pontos) {
+            tmp = times[j].pontos;
+            times[j].pontos = times[j-1].pontos;
+            times[j-1].pontos = tmp;
+            j--;
+        }
+    }
 }
 
 int main() {
