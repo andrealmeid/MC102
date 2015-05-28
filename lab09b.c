@@ -5,9 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* esse metodo torna as notas dos jogadores que ja estao em algum time
+ * negativas para que eles nao possam ser escolhidos novamente */
 void negativar(float **jogadores, int nJogadores, int a){
     int i;
-    
     for(i=0;i<nJogadores;i++){
         jogadores[i][a]=-1;
     }
@@ -15,8 +16,15 @@ void negativar(float **jogadores, int nJogadores, int a){
 
 int main(){
     
-    int nJogadores, nTimes, i, j, k, **time, maior, jTimes, capitao;
+    /* nJogadores guarda o numero de jogadores; nTimes guarda o numero de times
+     * jTimes guarda o numero de jogadores por time */
+    int nJogadores, nTimes, jTimes;
     
+    /* maior guarda a maior nota encontrada; capitao guarda o capitao do time
+     * atual em processamento; **time e a matriz que guarda os times formados*/  
+    int maior, capitao, i, j, k, **time;
+    
+    /* **jogadores guarda as notas, *media guarda as medias dos jogadores */
     float **jogadores, *media;
     
     scanf("%d %d", &nJogadores, &nTimes);
@@ -31,13 +39,13 @@ int main(){
         time[i] = malloc(jTimes * sizeof(int));
     
     for(i=0;i<nJogadores;i++)
-        media[i]=0;
+        media[i] = 0;
     
     jogadores = malloc(nJogadores * sizeof(float*));
     for(i=0;i<nJogadores;i++)
         jogadores[i] = malloc(nJogadores * sizeof(float));
     
-    
+    /* recebe as notas e guarda a soma no vetor media */
     for(i=0;i<nJogadores;i++){
         for(j=0;j<nJogadores;j++){
             scanf("%f", &jogadores[i][j]);
@@ -62,6 +70,8 @@ int main(){
         negativar(jogadores, nJogadores, maior);
     }
     
+    /* forma os times com base na maior nota atriuida pelo capitao e 
+     * negativa as notas que ja foram usadas */
     for(i=1;i<jTimes;i++){
         for(j=0;j<nTimes;j++){
             maior=0;
@@ -71,12 +81,9 @@ int main(){
                     maior=k;
             }
             time[j][i]=maior;
-            negativar(jogadores, nJogadores, maior);
-            
+            negativar(jogadores, nJogadores, maior);        
         }
     }
-    
-    
     
     /* impressao dos valores */
     for(i=0;i<nTimes;i++){
