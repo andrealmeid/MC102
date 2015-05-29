@@ -28,7 +28,49 @@ void inicializaStruct(time_t time[]){
         time[i].setsGanhos=0;
         time[i].setsPerdidos=0;
     }
+}
+
+int comparaTimes(time_t *timeA, time_t *timeB, int confronto[][6]){
+    /* retorna 1 se o primeiro for mair que o segundo
+     * e -1 se ocorrer o oposto */
+    float razaoA, razaoB;
     
+    if(timeA->pontos > timeB->pontos)
+        return 1;
+    else if(timeA->pontos < timeB->pontos)
+        return -1;
+    else if(timeA->vitorias > timeB->vitorias)
+        return 1;
+    else if(timeA->vitorias < timeB->vitorias)
+        return -1;
+    else {
+        razaoA = (float) timeA->setsGanhos/
+        (timeA->setsGanhos+timeA->setsPerdidos);
+        razaoB = (float) timeB->setsGanhos/
+        (timeB->setsGanhos+timeB->setsPerdidos);
+        
+        if(razaoA > razaoB)
+            return 1;
+        else if(razaoA < razaoB)
+            return -1;
+        else {
+            razaoA = (float) timeA->pontosGanhos/
+            (timeA->pontosGanhos+timeA->pontosPerdidos);
+            razaoB = (float) timeB->pontosGanhos/
+            (timeB->pontosGanhos+timeB->pontosPerdidos);
+            
+            if(razaoA > razaoB)
+                return 1;
+            else if(razaoA < razaoB)
+                return -1;
+            else
+                if(confronto[timeA->indice][timeB->indice]==1)
+                    return 1;
+                else 
+                    return -1;
+        }
+    }
+        
 }
 
 int leString(time_t time[]){
@@ -94,6 +136,9 @@ void leResultadosChave(time_t timesChave[], int confrontoDireto[][6]) {
         indiceA = leString(timesChave);
         indiceB = leString(timesChave);
 
+        setsA=0;
+        setsB=0;
+        
         do {         
             scanf("%d-%d%c", &n1, &n2, &aux);
             if(n1>n2){
@@ -105,14 +150,15 @@ void leResultadosChave(time_t timesChave[], int confrontoDireto[][6]) {
                 atualizaSetsPontos(&timesChave[indiceB], 1, 0, n2, n1);
                 setsB++;
             }
+            
         } while(aux!='\n');
         
         if(setsA>setsB){
-            atualizaPartida(&timesChave[indiceA], &timesChave[indiceB], setsA-setsB,
-                            confrontoDireto);
+            atualizaPartida(&timesChave[indiceA], &timesChave[indiceB], 
+                            setsA-setsB, confrontoDireto);
         } else {
-            atualizaPartida(&timesChave[indiceB], &timesChave[indiceA], setsB-setsA,
-                            confrontoDireto);
+            atualizaPartida(&timesChave[indiceB], &timesChave[indiceA], 
+                            setsB-setsA, confrontoDireto);
         }
 
     }
@@ -120,17 +166,20 @@ void leResultadosChave(time_t timesChave[], int confrontoDireto[][6]) {
 
 /* Ordena o vetor de times */
 void ordenaTimes(time_t times[], int n, int confrontoDireto[][6]){
-    int i, j, tmp;
+    int i, j, comparacao;
+    time_t aux;
     
-    for (i=1;i<n;i++) {
-        j = i;
-        while (j>0 && times[j-1].pontos > times[j].pontos) {
-            tmp = times[j].pontos;
-            times[j].pontos = times[j-1].pontos;
-            times[j-1].pontos = tmp;
-            j--;
-        }
-    }
+    for(i=0;i<n;i++)
+        for(j=0;j<n;j++){
+            if(j==i)
+               continue;
+            comparacao = comparaTimes(&times[i], &times[j], confrontoDireto);
+            if(comparacao==1){
+                aux = times[j];
+                times[j] = times[i];
+                times[i] = aux;
+            }
+    }   
 }
 
 int main() {
@@ -142,11 +191,12 @@ int main() {
    /* le entrada */
    leResultadosChave(timesChaveA, confrontosChaveA);
    leResultadosChave(timesChaveB, confrontosChaveB);
-  
+   
+    
    /* ordena os vetores de times na ordem de classificacao */
    ordenaTimes(timesChaveA, 6, confrontosChaveA);
    ordenaTimes(timesChaveB, 6, confrontosChaveB);
-
+   
    /* imprime a saida */
    for (i = 0; i < 4; i++) {
       printf("%s x %s\n", timesChaveA[i].nome, timesChaveB[3-i].nome);
