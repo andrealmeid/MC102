@@ -14,7 +14,7 @@ struct Dados_Bancarios{
     char sobrenome[21];
     int conta;
     int agencia;
-    float saldo;
+    double saldo;
 };
 
 typedef struct Dados_Bancarios dados;
@@ -34,12 +34,12 @@ int verificarDados(int conta, int agencia, dados *dados, int n){
 int main(){
     /* nClientes = numero de clientes; nTrans = numero de transacoes */
     int nClientes, nTrans, i;
-    /* variaveis auxliares para realizar as tranferencias; F = from, T = to */
-    int  conta, agencia;
-    /* indice = indice da conta; se ela não existe, guarda -1 */
+    /* variaveis auxliares para realizar as tranferencias */
+    int  conta, agencia, autorizado;
+    /* indice da conta; se ela não existe, guarda -1; F = from, T = to */
     int indiceF, indiceT;
     
-    float valor;
+    double valor;
     
     dados *banco;
     
@@ -49,36 +49,37 @@ int main(){
 
     /* entrada dos dados dos clientes */
     for(i=0;i<nClientes;i++){
-        scanf("%d %d", &banco[i].conta, &banco[i].agencia);
+        scanf("%d@%d", &banco[i].conta, &banco[i].agencia);
         scanf("%s %s", banco[i].nome, banco[i].sobrenome);
-        scanf("%f", &banco[i].saldo);
+        scanf("%lf", &banco[i].saldo);
     }
     
     /* entrada e realizacao das tranferencias */
     for(i=0;i<nTrans;i++){
-        
-        scanf("%d %d", &conta, &agencia);
+        autorizado=TRUE;    
+                
+        scanf("%d@%d >> ", &conta, &agencia);
         indiceF = verificarDados(conta, agencia, banco, nClientes);
         if(indiceF == -1)
-            continue;
+            autorizado=FALSE;
         
-        scanf("%f", &valor);    
-        if(valor<banco[indiceF].saldo)
-            continue;
+        scanf("%lf", &valor);    
+        if(valor>banco[indiceF].saldo)
+            autorizado=FALSE;
         
-        scanf("%d %d", &conta, &agencia);
+        scanf(" >> %d@%d", &conta, &agencia);
         indiceT = verificarDados(conta, agencia, banco, nClientes);
-        if(indiceT == -1)
+        if(indiceT == -1 || autorizado==FALSE)
             continue;
-
+        
         banco[indiceF].saldo-=valor;
         banco[indiceT].saldo+=valor;
-        
+         
     }
     
     /* impressao dos valores finais da contas */
     for(i=0;i<nClientes;i++){
-        printf("%d@%d %s %s %.2f", banco[i].conta, banco[i].agencia,
+        printf("%d@%d %s %s %.2lf\n", banco[i].conta, banco[i].agencia,
                banco[i].nome, banco[i].sobrenome, banco[i].saldo);
     }
         
