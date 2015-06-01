@@ -1,12 +1,11 @@
 /* Nome: Andre Figueiredo de Almeida
  * RA: 164047
- * Laboratorio 11a - Transferências Bancárias */
+ * Laboratorio 11a - Transferencias Bancarias */
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TRUE 1
-#define FALSE 0
+#define FALSE -1
 
 /* registro dos dados bancarios dos clientes */
 struct Dados_Bancarios{
@@ -19,7 +18,8 @@ struct Dados_Bancarios{
 
 typedef struct Dados_Bancarios dados;
 
-/* verificar se a conta existe */
+/* verificar se a conta existe. caso positivo, retorna o endereco; caso 
+ * contrario, retorna FALSE (-1) */
 int verificarDados(int conta, int agencia, dados *dados, int n){
     int i;
     
@@ -27,18 +27,18 @@ int verificarDados(int conta, int agencia, dados *dados, int n){
         if(dados[i].conta == conta && dados[i].agencia == agencia)
             return i;
     }
-        
-    return -1;
+    
+    return FALSE;
 }
 
 int main(){
     /* nClientes = numero de clientes; nTrans = numero de transacoes */
     int nClientes, nTrans, i;
     /* variaveis auxliares para realizar as tranferencias */
-    int  conta, agencia, autorizado;
-    /* indice da conta; se ela não existe, guarda -1; F = from, T = to */
-    int indiceF, indiceT;
-    
+    int  conta, agencia;
+    /* indice = endereco da conta */
+    int indiceDe, indicePara;
+    /* valor da transacao */
     double valor;
     
     dados *banco;
@@ -55,34 +55,35 @@ int main(){
     }
     
     /* entrada e realizacao das tranferencias */
-    for(i=0;i<nTrans;i++){
-        autorizado=TRUE;    
+    for(i=0;i<nTrans;i++){   
                 
+        
         scanf("%d@%d >> ", &conta, &agencia);
-        indiceF = verificarDados(conta, agencia, banco, nClientes);
-        if(indiceF == -1)
-            autorizado=FALSE;
+        indiceDe = verificarDados(conta, agencia, banco, nClientes);
         
+        /* se a conta nao tiver saldo suficiente, torna o indice invalido */
         scanf("%lf", &valor);    
-        if(valor>banco[indiceF].saldo)
-            autorizado=FALSE;
-        
+        if(valor>banco[indiceDe].saldo)
+            indiceDe=FALSE;
+                
         scanf(" >> %d@%d", &conta, &agencia);
-        indiceT = verificarDados(conta, agencia, banco, nClientes);
-        if(indiceT == -1 || autorizado==FALSE)
-            continue;
+        indicePara = verificarDados(conta, agencia, banco, nClientes);       
         
-        banco[indiceF].saldo-=valor;
-        banco[indiceT].saldo+=valor;
-         
+        /* se os dois enderecos forem validos, realiza a tranferencia */
+        if(indiceDe != FALSE && indicePara != FALSE){
+        banco[indiceDe].saldo-=valor;
+        banco[indicePara].saldo+=valor;
+        }
+        
     }
     
     /* impressao dos valores finais da contas */
     for(i=0;i<nClientes;i++){
         printf("%d@%d %s %s %.2lf\n", banco[i].conta, banco[i].agencia,
                banco[i].nome, banco[i].sobrenome, banco[i].saldo);
-    }
+    }      
         
+    free(banco);
     
     return 0;
 }
