@@ -71,8 +71,8 @@ int main(){
         
         /* se os dois enderecos forem validos, realiza a tranferencia */
         if(indiceDe != FALSE && indicePara != FALSE){
-        banco[indiceDe].saldo-=valor;
-        banco[indicePara].saldo+=valor;
+            banco[indiceDe].saldo-=valor;
+            banco[indicePara].saldo+=valor;
         }
         
     }
