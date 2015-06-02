@@ -7,7 +7,7 @@
 
 #define MAX 6
 #define TRUE 1
-#define FALSE 0
+#define FALSE -1
 
 struct time {
    char nome[21];
@@ -16,6 +16,7 @@ struct time {
 };
 typedef struct time time_t;
 
+/* inicializa os valores numeros com 0 e o nome com a primera posicao vazia */
 void inicializaStruct(time_t time[]){
     int i;  
     
@@ -30,49 +31,55 @@ void inicializaStruct(time_t time[]){
     }
 }
 
-int comparaTimes(time_t *timeA, time_t *timeB, int confronto[][6]){
-    /* retorna 1 se o primeiro for mair que o segundo
-     * e -1 se ocorrer o oposto */
+/* retorna TRUE se o primeiro for o ganhador e FALSE se ocorrer o oposto.
+ * a funcao compara os times pelos criterios na ordem de prioridade.
+ * assim que encontra algum desempate, retorna o time ganhador */
+int comparaTimes(time_t *timeA, time_t *timeB, int confronto[][6]){    
     float razaoA, razaoB;
     
+    /* desempate por pontos */
     if(timeA->pontos > timeB->pontos)
-        return 1;
-    else if(timeA->pontos < timeB->pontos)
-        return -1;
-    else if(timeA->vitorias > timeB->vitorias)
-        return 1;
-    else if(timeA->vitorias < timeB->vitorias)
-        return -1;
-    else {
-        razaoA = (float) timeA->setsGanhos/
-        (timeA->setsGanhos+timeA->setsPerdidos);
-        razaoB = (float) timeB->setsGanhos/
-        (timeB->setsGanhos+timeB->setsPerdidos);
+        return TRUE;
+    if(timeA->pontos < timeB->pontos)
+        return FALSE;
+    
+    /* por numero de vitorias */
+    if(timeA->vitorias > timeB->vitorias)
+        return TRUE;
+    if(timeA->vitorias < timeB->vitorias)
+        return FALSE;
+    
+    /* pela razao de sets ganhos */
+    razaoA = (float) timeA->setsGanhos/(timeA->setsGanhos+timeA->setsPerdidos);
+    razaoB = (float) timeB->setsGanhos/(timeB->setsGanhos+timeB->setsPerdidos);
         
-        if(razaoA > razaoB)
-            return 1;
-        else if(razaoA < razaoB)
-            return -1;
-        else {
-            razaoA = (float) timeA->pontosGanhos/
-            (timeA->pontosGanhos+timeA->pontosPerdidos);
-            razaoB = (float) timeB->pontosGanhos/
-            (timeB->pontosGanhos+timeB->pontosPerdidos);
+    if(razaoA > razaoB)
+        return TRUE;
+    if(razaoA < razaoB)
+        return FALSE;
+        
+    /* pela razao de pontos ganhos */        
+    razaoA = (float) 
+        timeA->pontosGanhos/(timeA->pontosGanhos+timeA->pontosPerdidos);
+    razaoB = (float) 
+        timeB->pontosGanhos/(timeB->pontosGanhos+timeB->pontosPerdidos);
             
-            if(razaoA > razaoB)
-                return 1;
-            else if(razaoA < razaoB)
-                return -1;
-            else
-                if(confronto[timeA->indice][timeB->indice]==1)
-                    return 1;
-                else 
-                    return -1;
-        }
-    }
-        
+    if(razaoA > razaoB)
+        return TRUE;
+    if(razaoA < razaoB)
+        return FALSE;
+            
+    /* pelo confronto direto */            
+    if(confronto[timeA->indice][timeB->indice]==TRUE)
+        return TRUE;
+    else
+        return FALSE;              
 }
 
+
+/* recebe o nome do time e verifica se ja foi salvo. se ainda nao foi, 
+ * encontra uma posicao livre (identificada com " ") e guarda la 
+ * retorna a posicao do time recebido */
 int leString(time_t time[]){
     char aux[21];
     int i;
@@ -128,18 +135,17 @@ void leResultadosChave(time_t timesChave[], int confrontoDireto[][6]) {
     int n1, n2, setsA=0, setsB=0;
     char aux;
     
-    inicializaStruct(timesChave);
+    inicializaStruct(timesChave);    
     
-    
-    for(i=0;i<15;i++){
-        
+    for(i=0;i<15;i++){        
         indiceA = leString(timesChave);
         indiceB = leString(timesChave);
 
         setsA=0;
         setsB=0;
         
-        do {         
+        /* le a partida e atualiza as informacoes dos times */
+        do {               
             scanf("%d-%d%c", &n1, &n2, &aux);
             if(n1>n2){
                 atualizaSetsPontos(&timesChave[indiceA], 1, 0, n1, n2);
@@ -149,37 +155,38 @@ void leResultadosChave(time_t timesChave[], int confrontoDireto[][6]) {
                 atualizaSetsPontos(&timesChave[indiceA], 0, 1, n1, n2);
                 atualizaSetsPontos(&timesChave[indiceB], 1, 0, n2, n1);
                 setsB++;
-            }
-            
+            }            
         } while(aux!='\n');
         
-        if(setsA>setsB){
+        /* verifica quem ganhou e registra no confronto direto */
+        if(setsA>setsB)
             atualizaPartida(&timesChave[indiceA], &timesChave[indiceB], 
                             setsA-setsB, confrontoDireto);
-        } else {
+        else 
             atualizaPartida(&timesChave[indiceB], &timesChave[indiceA], 
                             setsB-setsA, confrontoDireto);
-        }
-
+        
     }
 }
 
 /* Ordena o vetor de times */
 void ordenaTimes(time_t times[], int n, int confrontoDireto[][6]){
-    int i, j, comparacao;
+    int i, j, comp;
     time_t aux;
     
+    /* ordena o vetor e nao compara um time com ele mesmo */
     for(i=0;i<n;i++)
         for(j=0;j<n;j++){
             if(j==i)
                continue;
-            comparacao = comparaTimes(&times[i], &times[j], confrontoDireto);
-            if(comparacao==1){
+            comp = comparaTimes(&times[i], &times[j], confrontoDireto);
+            if(comp == TRUE){
                 aux = times[j];
                 times[j] = times[i];
                 times[i] = aux;
             }
-    }   
+        }
+    
 }
 
 int main() {
@@ -192,7 +199,6 @@ int main() {
    leResultadosChave(timesChaveA, confrontosChaveA);
    leResultadosChave(timesChaveB, confrontosChaveB);
    
-    
    /* ordena os vetores de times na ordem de classificacao */
    ordenaTimes(timesChaveA, 6, confrontosChaveA);
    ordenaTimes(timesChaveB, 6, confrontosChaveB);
