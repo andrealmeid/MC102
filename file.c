@@ -14,6 +14,8 @@ void escrever(FILE *arqin, FILE *arqout);
 
 int verificaTagInterna(FILE *arqin);
 
+void converte_entidade(FILE *arqin, FILE *arqout);
+
 int main(){
     char aux;
     FILE *file = fopen("texto.txt", "r");
@@ -38,6 +40,26 @@ int main(){
     return 0;
 }
 
+void converte_entidade(FILE *arqin, FILE *arqout) {
+    char c, entidade[10];
+    int i = 0;
+    
+    /* armazena o codigo da entidade ate encontrar o caractere ';' */
+    c = fgetc(arqin);
+    while (c != ';') {
+        entidade[i++] = c;
+        c = fgetc(arqin);
+    }
+    entidade[i] = '\0';
+    
+    /* se a entidade corresponde ao caractere aspas simples ou aspas duplas,
+       imprime o caractere no arquivo de saida */
+    if (!strcmp(entidade, "#39"))
+        fprintf(arqout, "\'");
+    else if(!strcmp(entidade, "quot"))
+        fprintf(arqout, "\"");
+}
+
 void escrever(FILE *arqin, FILE *arqout){
     char c;
     int tag;
@@ -46,6 +68,11 @@ void escrever(FILE *arqin, FILE *arqout){
     printf("iniciando escrita\n");   
     
     while(c!='<'){     
+        if(c=='&'){
+            printf("pre conversao = %c\n", c);
+            converte_entidade(arqin, arqout);
+            printf("pos conversao = %c\n", c);
+        }
         fprintf(arqout, "%c", c);
         c = fgetc(arqin);
     }
@@ -84,7 +111,6 @@ int verificaTagInterna(FILE *arquivo){
     printf(" tag deve ser ignorada\n");
     return tagContinua;
 }
-
 
 void verificaTag(FILE *arquivo, FILE *arqout){
     char aux, tag_atual[48], tag_fim[] = "/p",
