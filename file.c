@@ -17,10 +17,14 @@ int verificaTagInterna(FILE *arqin);
 void converte_entidade(FILE *arqin, FILE *arqout);
 
 int main(){
-    char aux;
-    FILE *file = fopen("texto.txt", "r");
-    FILE *fileout = fopen("out.txt", "w");
+    char aux, filename[30], fileoutname[30];
+    FILE *file, *fileout;
         
+    scanf("%s %s", filename, fileoutname);
+    
+    file = fopen(filename, "r");
+    fileout = fopen(fileoutname, "w");
+    
     aux = fgetc(file);
     while(aux != EOF){
         
@@ -68,13 +72,12 @@ void escrever(FILE *arqin, FILE *arqout){
     printf("iniciando escrita\n");   
     
     while(c!='<'){     
-        if(c=='&'){
-            printf("pre conversao = %c\n", c);
+        if(c=='&'){ 
+            printf("entidade encontrada\n");
             converte_entidade(arqin, arqout);
-            printf("pos conversao = %c\n", c);
-        }
+        } else
         fprintf(arqout, "%c", c);
-        c = fgetc(arqin);
+        c = fgetc(arqin);        
     }
         
     tag = verificaTagInterna(arqin);
@@ -113,7 +116,7 @@ int verificaTagInterna(FILE *arquivo){
 }
 
 void verificaTag(FILE *arquivo, FILE *arqout){
-    char aux, tag_atual[48], tag_fim[] = "/p",
+    char aux, tag_atual[48],
     tag_inicio[] = "p class=\"ProfileTweet-text js-tweet-text u-dir\"";
     int i=0;
     
@@ -126,10 +129,6 @@ void verificaTag(FILE *arquivo, FILE *arqout){
     
     tag_atual[i]='\0';              
 
-    if(!strcmp(tag_atual, tag_fim)){
-        printf(" tag é do tipo final\n");
-        return;
-    }
     
     if(!strcmp(tag_atual, tag_inicio)){
 
@@ -141,10 +140,6 @@ void verificaTag(FILE *arquivo, FILE *arqout){
         escrever(arquivo, arqout);
         return;
     }
-    
-    while(aux!='>')
-        aux = fgetc(arquivo);      
-    printf(" tag deve ser ignorada\n");
-    return;
+
     
 }
