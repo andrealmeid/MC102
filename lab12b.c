@@ -37,10 +37,25 @@ struct Jogador {
 
 typedef struct Jogador Jogador;
   
+/* faz a troca da ordenacao */
+void troca(int pontuacao[], Jogador scout[], int i, int l){
+    char nome[MAXNOME];
+    int aux;
     
+    aux = pontuacao[i];
+    pontuacao[i] = pontuacao[l];
+    pontuacao[l] = aux;
+    strcpy(nome, scout[i].nome); 
+    strcpy(scout[i].nome, scout[l].nome);
+    strcpy(scout[l].nome, nome); 
+}
+    
+    
+/* atualiza as estatisticas dos jogadores com os dados da entrada */    
 void atualizaScout(Jogador scout[], char nome[MAXNOME], int dados[MAXDADOS]){
     int i=0;
     
+    /* encontra o registro do jogador pelo nome */
     while(strcmp(nome, scout[i].nome))    
         i++;
     
@@ -61,10 +76,11 @@ int main(int argc, char **argv) {
     char nomeArqSaida[MAXNOMEARQ];
     /* nome do jogador */
     char nome[26];
-    /* peso das estatisticas, dados estatisticos do jogador, numero de rodadas,
-     * numero de jogadores no total e numero de jogadores da rodada */
-    int peso[MAXDADOS], dados[MAXDADOS], nRodadas, nJogadoresTotal, nJogadores, 
-    pontuacao[MAXJOGADORES], i, j, l, add=1;
+    /* peso das estatisticas, dados estatisticos do jogador, numero de rodadas
+     * e numero de jogadores no total */
+    int peso[MAXDADOS], dados[MAXDADOS], nRodadas, nJogadoresTotal;
+    /* numero de jogadores da rodada; pontuacao final dos jogadores */
+    int nJogadores, pontuacao[MAXJOGADORES], i, j, l;
     /* arquivo de entrada e arquivo de saida */
     FILE *arqin, *arqout;
 
@@ -78,6 +94,7 @@ int main(int argc, char **argv) {
     arqin = fopen(nomeArqEstat, "rb");
     arqout = fopen(nomeArqSaida, "wb");
     
+    /* escreve no struct scout os dados escritos no arquivo de entrada */
     fread(&nJogadoresTotal, sizeof(int), 1, arqin);
     for(i=0; i<nJogadoresTotal; i++)
         fread(&scout[i], sizeof(Jogador), 1, arqin);        
@@ -113,39 +130,22 @@ int main(int argc, char **argv) {
     scout[i].C1*peso[0]+scout[i].C2*peso[1]+scout[i].C3*peso[2]-
     scout[i].C4*peso[3]-scout[i].C5*peso[4]-scout[i].C6*peso[5];
     }
-    
-    /* ordenacao dos jogadores */
-      for (i=1;i<nJogadoresTotal;i++) {
-            j = i;
-            while (j>0 && pontuacao[j-1]<pontuacao[j]) {
-                  l = pontuacao[j];
-                  strcpy(nome, scout[j].nome);
-                  pontuacao[j] = pontuacao[j-1];
-                  strcpy(scout[j].nome, scout[j-1].nome);
-                  pontuacao[j-1] = l;
-                  strcpy(scout[j-1].nome, nome);
-                  j--;
+            
+    /* ordenacao dos jogadores com selection sort + tratamento de empate */       
+      for (i=0;i<nJogadoresTotal-1;i++) {
+            l = i;
+            for (j=i+1;j<nJogadoresTotal;j++)
+                if (pontuacao[j] > pontuacao[l]){                    
+                    l = j;
+                /* se dois jogadores empatam, ordena lexicograficamente */                    
+                } else if(pontuacao[j]==pontuacao[l] &&
+                          strcmp(scout[j].nome, scout[l].nome)<0){                     
+                    troca(pontuacao, scout, i, l);
+                }
+                if (l != i) {
+                    troca(pontuacao, scout, i, l);
             }
       }
-            
-    while(add){
-        add = 0;
-        
-        for(i=0;i<nJogadoresTotal-1;i++){
-            if(strcmp(scout[i].nome, scout[i+1].nome)>0 && 
-               pontuacao[i]==pontuacao[i+1])
-            {
-            strcpy(nome, scout[i].nome); 
-            strcpy(scout[i].nome, scout[i+1].nome);
-            strcpy(scout[i+1].nome, nome);
-            l = pontuacao[i];
-            pontuacao[i] = pontuacao[i+1];
-            pontuacao[i+1] = l;
-            add = 1;
-            }
-                
-        }
-    }
     /* impressao dos tres primeiros jogadores */
     for(i=0;i<3;i++){
         printf("%s\n", scout[i].nome);
