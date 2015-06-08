@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
     /* peso das estatisticas, dados estatisticos do jogador, numero de rodadas,
      * numero de jogadores no total e numero de jogadores da rodada */
     int peso[MAXDADOS], dados[MAXDADOS], nRodadas, nJogadoresTotal, nJogadores, 
-    pontuacao[MAXJOGADORES], i, j, l;
+    pontuacao[MAXJOGADORES], i, j, l, add=1;
     /* arquivo de entrada e arquivo de saida */
     FILE *arqin, *arqout;
 
@@ -110,8 +110,8 @@ int main(int argc, char **argv) {
     for(i=0;i<nJogadoresTotal;i++){
         j=0;
         pontuacao[i]=
-    scout[i].C1*peso[++j]+scout[i].C2*peso[++j]+scout[i].C3*peso[++j]-
-    scout[i].C4*peso[++j]-scout[i].C5*peso[++j]-scout[i].C6*peso[++j];
+    scout[i].C1*peso[0]+scout[i].C2*peso[1]+scout[i].C3*peso[2]-
+    scout[i].C4*peso[3]-scout[i].C5*peso[4]-scout[i].C6*peso[5];
     }
     
     /* ordenacao dos jogadores */
@@ -127,10 +127,29 @@ int main(int argc, char **argv) {
                   j--;
             }
       }
+            
+    while(add){
+        add = 0;
         
+        for(i=0;i<nJogadoresTotal-1;i++){
+            if(strcmp(scout[i].nome, scout[i+1].nome)>0 && 
+               pontuacao[i]==pontuacao[i+1])
+            {
+            strcpy(nome, scout[i].nome); 
+            strcpy(scout[i].nome, scout[i+1].nome);
+            strcpy(scout[i+1].nome, nome);
+            l = pontuacao[i];
+            pontuacao[i] = pontuacao[i+1];
+            pontuacao[i+1] = l;
+            add = 1;
+            }
+                
+        }
+    }
     /* impressao dos tres primeiros jogadores */
-    for(i=0;i<3;i++)
+    for(i=0;i<3;i++){
         printf("%s\n", scout[i].nome);
+    }
         
     /* fechando arquivos */
     fclose(arqin);
