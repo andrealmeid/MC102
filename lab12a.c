@@ -7,7 +7,9 @@
 
 #define MAX_FILENAME 25
 #define MAX_ENTITY 10
+#define MAX_TAG 48
 #define TAG_INICIO "p class=\"ProfileTweet-text js-tweet-text u-dir\""
+#define TAG_FIM "/p"
 #define TRUE 1
 #define FALSE 0
 
@@ -36,7 +38,7 @@ void converte_entidade(FILE *arqin, FILE *arqout) {
         fprintf(arqout, "\"");
 }
 
-/* Le os outros atributos da tag para nao aparecerem na escrita */
+/* Le os atributos da tag ate o final para nao aparecerem na escrita */
 void limpaTag(FILE *arqin){
     char c = fgetc(arqin);
     
@@ -54,43 +56,42 @@ void escreveTweet(FILE *arqin, FILE *arqout){
         else 
             fprintf(arqout, "%c", c);
             c = fgetc(arqin);
-        }
-    }        
+    }
+}        
 
 /* Analisa as tags do codigo HTML para verificar se eh um tweet */
 void analisaTag(FILE *arqin, FILE *arqout, int *escrever){
-    char c, tag_atual[48];
+    /* tag_atual tem tamanho 48 porque esse eh o tamanho do texto da tag
+     * que identifica o inicio de um tweet. o resto da tag (independente do
+     * tipo) nao eh armazenado ja que nao eh relevante */
+    char c, tag_atual[MAX_TAG];
     int i=0;
            
+    /* recebe o texto da tag */
     c = fgetc(arqin);
-    while(c!='>' && i<47){
+    while(c!='>' && i<MAX_TAG-1){
        tag_atual[i++] = c;
        c = fgetc(arqin);
-    }
-    
+    }    
     tag_atual[i]='\0';   
-    printf("tag: %s\n", tag_atual);
     
     /* se a tag tem os atributos de um tweet */
     if(!strcmp(tag_atual, TAG_INICIO)){        
         limpaTag(arqin);       
-        printf(" tag é do tipo inicio\n");
         *escrever = TRUE;
         escreveTweet(arqin, arqout);
         return;
     }         
     
     /* se a tag tem o formato de final de tweet */
-    if(!strcmp(tag_atual, "/p") && *escrever==TRUE){
-        printf(" tag é do tipo final\n");
+    if(!strcmp(tag_atual, TAG_FIM) && *escrever==TRUE){
         fprintf(arqout, "\n");
         *escrever = FALSE;
         return;
     }
     
-    /* se a tag pode ser ignorada */    
+    /* se a tag nao se encaixa nas duas pode ser ignorada */
     if(*escrever == TRUE){
-        printf(" tag não classificada\n");
         if(c!='>')
             limpaTag(arqin);
         escreveTweet(arqin, arqout);
@@ -101,7 +102,8 @@ void analisaTag(FILE *arqin, FILE *arqout, int *escrever){
 void extrai_tweets(char nomearqin[], char nomearqout[]) {
     FILE *arqin = fopen(nomearqin, "r");
     FILE *arqout = fopen(nomearqout, "w");
-    /* c = char auxiliar */
+    
+    /* c = char auxiliar; escrever = se eh para escrever no arquivo de saida */
     char c = fgetc(arqin);  
     int escrever = FALSE;
     
@@ -109,6 +111,9 @@ void extrai_tweets(char nomearqin[], char nomearqout[]) {
     while(c != EOF){        
         /* se encontrar alguma tag, chama o analisaTag() */
         if(c=='<'){
+                /* como o metodo escreveTweet sempre acaba em um '<', o 
+                 * metodo analisaTag eh chamado repetidas vezes se esta
+                 * ocorrendo uma escrita */                 
                 analisaTag(arqin, arqout, &escrever);
                 while(escrever == TRUE)
                     analisaTag(arqin, arqout, &escrever);
