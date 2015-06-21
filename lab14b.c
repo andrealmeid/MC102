@@ -5,33 +5,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int menor=100000000;
+
 int real(int n, int nC, int combs[], int **infl){
-    int i, j, k, r=0;
+    int i, j, k, r=0, **aux;
     
-    for(i=0;i<n;i++){
+    aux = malloc(n * sizeof(int *));
+    for(i=0;i<n;i++)
+        aux[i] = malloc(n * sizeof(int));
+    
+    for(i=0;i<n;i++)
         for(j=0;j<n;j++)
-            printf("%d ", infl[i][j]);
-        printf("\n");
-    }
+            aux[i][j]=infl[i][j];    
     
     for(i=0;i<nC-1;i++){
         for(j=i+1;j<nC;j++){
             for(k=0;k<n;k++){
-                if(infl[combs[i]][k]==1 && infl[combs[j]][k]==1){
-                    infl[combs[i]][k]=0;
-                    printf("[%d][%d] e [%d][%d]\n", 
-                           combs[i], k, combs[j], k);
+                if(aux[combs[i]][k]==1 && aux[combs[j]][k]==1){
+                    aux[combs[i]][k]=0;
                     r++;
                 }
             }
         }
-    }
-    printf("r=%d\n", r);
-    
-    for(i=0;i<n;i++){
-        for(j=0;j<n;j++)
-            printf("%d ", infl[i][j]);
-        printf("\n");
     }
         
     return r; 
@@ -54,12 +49,10 @@ void combinar(int n, int nC, int combs[], int prox, int tam, int parl[],
             c+=parl[combs[i]];
             s+=salario[combs[i]];
         }
-        if(c==7)
-            r = real(n, nC, combs, infl);
-        if(c>=k){            
-//             for (i = 0; i < nC; i++)
-//                 printf("%d ", combs[i]);
-//             printf("cont = %d sala = %d\n", c, s);  
+        r = real(n, nC, combs, infl);
+        if(c-r>=k){                      
+            if(s<menor)
+                menor=s;
         }
     }
     else
@@ -106,17 +99,14 @@ int main(){
     }
         
     
-//     printf("Lista de custo/influencias:\n");
-//     for(i=0;i<n;i++)
-//         printf("parlamentar %d: infl = %d custo = %d c/i = %d\n", 
-//                i+1, parl[i], salario[i], salario[i]/parl[i]);         
+
     
     while(nC<=n){
         combinar(n, nC, combs, 0, 0, parl, salario, &cont, k, infl);
         nC++;
     }
         
-//         printf("cont = %d\n", cont);
+        printf("%d\n", menor);
         
     /* desalocacao */
     free(salario);
