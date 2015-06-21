@@ -1,4 +1,4 @@
-/* Nome: André Figueiredo de Almeida
+/* Nome: Andre Figueiredo de Almeida
  * RA: 164047
  * Laboratorio 14a - Cargo-Bot - Part III*/
 
@@ -9,14 +9,13 @@
 #define TRUE 1
 #define FALSE 0
 
-void executaProg(int num, char progs[][9], char *hold, char boxes[][10], 
+void executaProg(int num, int *acidente, char **progs, char *hold, char boxes[][10], 
                  int *garra, int x, int y, int *cont, int e){
-    int i=0, j, acidente=FALSE, auxn;
+    int i=0, j, auxn;
     char aux = progs[num][i];
     
     /* para o loop quando encotnar o fim do programa (*) */   
     while(aux!='*'){
-        printf("comando:%c hold:%c i:%d\n", aux, *hold, i); 
         j=0;
         switch(aux){
             /* pegar/soltar caixa */
@@ -40,7 +39,7 @@ void executaProg(int num, char progs[][9], char *hold, char boxes[][10],
             if(*garra<x-1)
                 *garra = *garra + 1;
             if(boxes[0][*garra]!='.' && *hold!='.')
-                acidente=TRUE;
+                *acidente=TRUE;
             break;
             
             /* move para esquerda se for possivel */   
@@ -48,7 +47,7 @@ void executaProg(int num, char progs[][9], char *hold, char boxes[][10],
             if(*garra>0)
                 *garra = *garra - 1;
             if(boxes[0][*garra]!='.' && *hold!='.')
-                acidente=TRUE;
+                *acidente=TRUE;
             break;
             
             /* nesse bloco, se as condicoes nao forem verdadeiras,
@@ -83,9 +82,7 @@ void executaProg(int num, char progs[][9], char *hold, char boxes[][10],
                 /* transforma o char em int */
                 auxn = aux - '1';
                 *cont = *cont + 1;
-                printf("add pilha prog %d\n", num+1);
-                executaProg(auxn, progs, hold, boxes, garra, x, y, cont, e);
-                printf("rvm pilha prog %d\n", num+1);
+                executaProg(auxn, acidente, progs, hold, boxes, garra, x, y, cont, e);
             }
             break;                      
         }              
@@ -93,8 +90,6 @@ void executaProg(int num, char progs[][9], char *hold, char boxes[][10],
         aux = progs[num][i];
     }    
     
-    if(acidente==TRUE)
-        printf("acidente\n");
 }
 
 int main(){   
@@ -107,14 +102,14 @@ int main(){
     
     /* e = num de execucoes de programas; i, j, k = contadores 
         * num serve de variavel auxiliar para uma conversao */
-    int e, i, cont=0;
+    int e, i, cont=1;
     
     /* boxes = posicionamento das caixas */
     char boxes[10][10];
     
     /* progs = armazena cada programa em uma linha, duas pos extras foram
         * adicionada para guardar o asterisco e o \0 */
-    char progs[60][9];
+    char **progs;
     
     /* garra = posicao da garra; acidente indica se ocorreu algum acidente */
     int garra=0, acidente = FALSE;
@@ -130,11 +125,11 @@ int main(){
     /* alocacoes dinamicas das matrizes *
     boxes = malloc(y * sizeof(char *));
     for(i=0;i<y;i++)
-        boxes[i] = malloc(x * sizeof(char));*
+        boxes[i] = malloc(x * sizeof(char));*/
     
     progs = malloc(p * sizeof(char *));
     for(i=0;i<p;i++)
-        progs[i] = malloc(c+1 * sizeof(char));*/
+        progs[i] = malloc(c+1 * sizeof(char));
             
     /* entrada das posicoes iniciais das caixas */
     for(i=0;i<y;i++)
@@ -146,7 +141,7 @@ int main(){
     
     /*PROCESSAMENTOS*/
 
-        executaProg(0, progs, &hold, boxes, &garra, x, y, &cont, e);
+        executaProg(0, &acidente, progs, &hold, boxes, &garra, x, y, &cont, e);
     
     
     /* imprime as posicoes das caixas se nenhum acidente ocorreu */
@@ -161,12 +156,12 @@ int main(){
     /*
     for(i=0;i<y;i++)
         free(boxes[i]);
-    free(boxes);
+    free(boxes);*/
     
     for(i=0;i<p;i++)
         free(progs[i]);
     free(progs);
-    */
+    
     
     return 0;
 }
